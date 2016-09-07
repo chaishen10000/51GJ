@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes" /> 
   <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
   <meta name="apple-mobile-web-app-title" content="Ratchet" /> 
-  <link rel="stylesheet" href="/wx-pages/css/ratchet.css?v=20150408" /> 
-  <link rel="stylesheet" href="/wx-pages/css/style.css?v=20150408" /> 
+  <link rel="stylesheet" href="/wx-admin/css/ratchet.css?v=20150408" /> 
+  <link rel="stylesheet" href="/wx-admin/css/style.css?v=20150408" /> 
 
   <style type="text/css"> 
 	.table_list{overflow:hidden;zoom:1;} 
@@ -19,10 +19,10 @@
  <body> 
  <?php
 include ('includes/dbconfig.php');
-include ('../wx-admin/includes/wx_message_class.php');
+include ('includes/wx_message_class.php');
 session_start();
-if (!$_SESSION['openid']) {
-	echo "<script>window.location.href='/wx-pages/wx_islogin.php';</script>";
+if (1>2) {
+	echo "<script>window.location.href='/wx-admin/islogin.php';</script>";
 }else{
 	$order_ID = $_GET["order_ID"];
 	$openid = $_SESSION['openid'];
@@ -44,47 +44,6 @@ if (!$_SESSION['openid']) {
     }
 	$obj=json_decode($service); 
 	$sqlstr = ""; 
-	//常规清洁
-    if(isset($obj->{'11'}))
-	   $sqlstr .= getserviceitem($db,'11')."x".$obj->{'11'}." "; 
-	if(isset($obj->{'12'}))
-	   $sqlstr .= getserviceitem($db,'12')."x".$obj->{'12'}." "; 
-	if(isset($obj->{'13'}))
-	   $sqlstr .= getserviceitem($db,'13')."x".$obj->{'13'}." "; 
-	if(isset($obj->{'14'}))
-	   $sqlstr .= getserviceitem($db,'14')."x".$obj->{'14'}." "; 
-	//深度清洁
-	if(isset($obj->{'21'}))
-	   $sqlstr .= getserviceitem($db,'21')."x".$obj->{'21'}." "; 
-	if(isset($obj->{'22'}))
-	   $sqlstr .= getserviceitem($db,'22')."x".$obj->{'22'}." "; 
-	if(isset($obj->{'23'}))
-	   $sqlstr .= getserviceitem($db,'23')."x".$obj->{'23'}." "; 
-	if(isset($obj->{'24'}))
-	   $sqlstr .= getserviceitem($db,'24')."x".$obj->{'24'}." "; 
-	//除尘除螨
-	if(isset($obj->{'31'}))
-	   $sqlstr .= getserviceitem($db,'31')."x".$obj->{'31'}." "; 
-	if(isset($obj->{'32'}))
-	   $sqlstr .= getserviceitem($db,'32')."x".$obj->{'32'}." "; 
-	if(isset($obj->{'33'}))
-	   $sqlstr .= getserviceitem($db,'33')."x".$obj->{'33'}." "; 
-	if(isset($obj->{'34'}))
-	   $sqlstr .= getserviceitem($db,'34')."x".$obj->{'34'}." "; 
-	//家电清洁
-	if(isset($obj->{'41'}))
-	   $sqlstr .= getserviceitem($db,'41')."x".$obj->{'41'}." "; 
-	if(isset($obj->{'42'}))
-	   $sqlstr .= getserviceitem($db,'42')."x".$obj->{'42'}." "; 
-	if(isset($obj->{'43'}))
-	   $sqlstr .= getserviceitem($db,'43')."x".$obj->{'43'}." "; 
-	if(isset($obj->{'44'}))
-	   $sqlstr .= getserviceitem($db,'44')."x".$obj->{'44'}." "; 
-	if(isset($obj->{'45'}))
-	   $sqlstr .= getserviceitem($db,'45')."x".$obj->{'45'}." ";
-	if($type=="房管家") $sqlstr = "房管家整体清洁养护";
-	if($type=="住前打理") $sqlstr = "住前整体清洁、整理";
-	if($type=="住后整理") $sqlstr = "住后整体清洁、整理";
 	//车管家
 	if(isset($obj->{'50'})){
 	   $sqlstr .= getserviceitem($db,$obj->{'50'});
@@ -116,7 +75,7 @@ if (!$_SESSION['openid']) {
 	$smm->send_manager_message($order_ID,$openid2,$time_serv,$type,$address,$remarks);
 	$smm->send_manager_message($order_ID,$openid3,$time_serv,$type,$address,$remarks);
 	$smm->send_manager_message($order_ID,$openid4,$time_serv,$type,$address,$remarks);
-	$smm->send_customer_message($order_ID,$openid,$time_serv,$type,$address,$remarks);
+	//$smm->send_customer_message($order_ID,$openid,$time_serv,$type,$address,$remarks);
 }
 
 function getserviceitem($db,$class)
@@ -127,23 +86,12 @@ function getserviceitem($db,$class)
     } 
 	return $itemname;
 }
-function getservicefeetype($db,$class)
-{
-    $row = $db->row_select("wx_service", "class='".$class."'", 1, "feetype", "service_ID");
-	foreach ($row as $key => $value) {
-		$feetype = $value['feetype'];
-    } 
-	return $feetype;
-}
 ?>
+<form name="fm1" method="post" action="" id="fm1" novalidate>
     <!--banner begin--> 
-    <div class="banner"> 
+    <div class="banner" style="text-align:center;"> 
       <h4>&nbsp;</h4>
-      <div style="text-align:center;"> 
-       <img style="margin:0 auto;" src="/wx-pages/images/ordersuccess.png" width="30%" alt="" /> 
-      </div> 
-      <h4>&nbsp;</h4>
-      <h3 style="text-align:center;color:#E6550F">恭喜您，下单成功！</h3> 
+      <span style="color:#E6550F; font-size:24px; font-weight:bold">设定订单费用</span> 
     </div> 
     <!--banner end--> 
     <ul class="table-view table-view2" id="onup"> 
@@ -193,27 +141,32 @@ function getservicefeetype($db,$class)
      </li> 
      <li class="table-view-cell table-disabled" id="numtable0"> 
       <div class="table-cell" style="text-align:center; font-weight:700;"> 
-       备注 
+       第三方<br/>费用 
       </div> 
       <div class="table-cell" style="text-align:left; ">
-       <?php if($type=="车管家"){?><span style="color:#E36406; font-size:14px">第三方费用,将由专人在服务前与您核实确认后垫付，服务完成后按实际发生金额结算。</span>
-       <?php }?> 
+       <input class="noborderbutton" type="text" name="third_part_fee" id="third_part_fee" placeholder="务必电话确认后再输入" />
       </div> 
      </li>
     </ul> 
-    <div class="table-mod"> 
+    <div class=""> 
        
      <ul class="table-view card table_list">
      <li> 
      <button class="btn btn-positive btn-positive2" style="width:100%;font-size:18px;" type="button" onClick="javascript:location.href='/wx-pages/'">回首页</button>
      </li>
      <li>
-     <button class="btn btn-positive btn-positive2" style="width:100%;font-size:18px;background-color:#E36406; border-color:#E36406" type="button" onClick="javascript:location.href='/wx-pages/wx_orderlist.php'">查看订单</button>
+     <button class="btn btn-positive btn-positive2" style="width:100%;font-size:18px;background-color:#E36406; border-color:#E36406" type="button" id="updata_tpf" onclick="javascript:submitTPFValidate();">提交订单</button>
+     <input type="hidden" name="order_ID" id="order_ID" value="<?php echo $order_ID;?>"/>
+     <input type="hidden" name="type" id="type" value="车管家"/>
+     <input type="hidden" name="openid" id="openid" value="<?php echo $openid;?>" />
+     <input type="hidden" name="$total_fee1" id="$total_fee1" value="<?php echo $total_fee1;?>" />
      </li>
      </ul> 
     </div> 
    </div> 
    <!--content end--> 
-  
+ </form>
+ <script type="text/javascript" src='http://libs.useso.com/js/jquery/1.6.1/jquery.min.js'></script>
+ <script type="text/javascript" src="/wx-admin/script/wx_main.js"></script>
  </body>
 </html>

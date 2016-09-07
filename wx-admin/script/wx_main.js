@@ -208,7 +208,7 @@ function isPositiveNumber(txt) { //是否为正数
 
 function isPositiveNumber2(txt) { //是否为正数
     if (txt == null || txt == "") {
-        return true;
+        return false;
     } else {
         txt = delSpace(txt);
         if (delSpace(txt).length < 8 || delSpace(txt).length > 12) {
@@ -604,3 +604,62 @@ function isupservice() { //数据检查之后的ajax提交事件
 	return false;
 };
 //深度清洁服务JS END
+
+//第三方费用提交  <车管家，生活管家>
+function submitTPFValidate() {
+	
+	var tpf = $("#third_part_fee").val();
+	if (tpf == undefined || tpf == "" || tpf == null) {
+		noticeDialog("请输入第三方费用");
+		return;
+	}else{
+		if(!isPositiveNumber(tpf)){
+			noticeDialog("输入数值不正确");
+		    return;
+			}
+	}
+	var order_ID = $("#order_ID").val();
+	if (order_ID == undefined || order_ID == "" || order_ID == null) {
+		noticeDialog("参数错误");
+		return;
+	}
+	if(confirm("确认提交？")){
+	   isupTPF();
+	}
+}
+
+
+function isupTPF() { //数据检查之后的ajax提交事件
+    //开始发送数据
+   $.ajax({ //请求登录处理页
+		url: "/wx-admin/ordersetfee_do.php", //处理页
+		type: "POST",
+		contentType:"application/x-www-form-urlencoded; charset=utf-8",
+		dataType: "text",
+		//传送请求数据
+		data: $('#fm1').serialize(),
+		success: function (strValue) { //登录成功后返回的数据
+			
+			//根据返回值进行状态显示
+			strValue = $.trim(strValue);
+			var strs = new Array(); //定义一数组 
+			strs = strValue.split(":"); //字符分割 
+			if (strs[0] == "True") {//注意是True,不是true
+			    //noticeDialog("预定成功，后续会有专人与您联系！");
+				//跳转到成功页面
+				window.location.href='/wx-admin/orderdetail.php?order_ID='+strs[1];
+			}else if(strs[0] == "余额不足"){
+				noticeDialog("余额不足，请联系客户！");
+			}
+			else{
+				noticeDialog("提交数据错误！"+strValue);
+			}
+		},
+		error: function(data) {
+			//alert("error:"+data.responseText);
+			noticeDialog("内部错误，请联系我们！");
+		}
+	});
+	return false;
+};
+//第三方费用提交  <车管家，生活管家> JS END

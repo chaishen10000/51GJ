@@ -47,6 +47,7 @@ if (!$_SESSION['openid']||$_SESSION['user_level'] <2 ) {
 		$remarks = $value['remarks'];
 		$worker = $value['worker'];
 		$assign = $value['assign'];
+		$third_part_fee = $value['third_part_fee'];
 		
 		//获取房产地址
 		$row = $db->row_select("wx_property", "property_ID=" . $property_ID, 1, "e", "property_ID");
@@ -211,7 +212,7 @@ function serviceupdate($db, $urow, $order_ID) {
        备注 
       </div> 
       <div class="table-cell" style="text-align:left; ">
-       <?php if($type=="车管家"){?><span style="color:#E36406; font-size:14px">第三方费用,将由专人在服务前与您核实确认后垫付，服务完成后按实际发生金额结算。</span>
+       <?php if($type=="车管家"||$type=="生活管家"){?>第三方费用：<span style="color:#E36406; font-size:24px"><?php echo $third_part_fee?>元</span>
        <?php }?> 
       </div> 
      </li>

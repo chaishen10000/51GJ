@@ -40,7 +40,8 @@ if (!isset($_GET['code'])) {
 	    echo "<script>url='".$_SESSION['geturl']."';window.location.href=url;</script>"; 
 	   }else{
 	   if (!empty($obj2['nickname'])) {
-			  $user_meta = array('user_login' => $obj2['nickname'], 'user_pass' => $wp_hasher->HashPassword($openid), 'display_name' => $obj2['nickname'], 'user_nicename' => $obj2['nickname'], 'user_url' => $obj2['headimgurl'], 'user_email' => 'wx_' . rand() . '@qq.com', 'openid' => $openid);
+		      $nickname = mysql_real_escape_string($obj2['nickname']);
+			  $user_meta = array('user_login' => $nickname, 'user_pass' => $wp_hasher->HashPassword($openid), 'display_name' => $nickname, 'user_nicename' => $nickname, 'user_url' => $obj2['headimgurl'], 'user_email' => 'wx_' . rand() . '@qq.com', 'openid' => $openid);
 			  $user_id = $db->row_insert('wp_users', $user_meta);
 			  
 			  $user_meta = array('user_id' => $user_id, 'meta_key' => 'wx_user_avatar', 'meta_value' => $obj2['headimgurl']);

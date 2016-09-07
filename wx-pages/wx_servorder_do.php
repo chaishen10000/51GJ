@@ -1,14 +1,16 @@
 <?php
 include 'includes/dbconfig.php';
 if (isset($_POST['time_serv']) && isset($_POST['property_ID']) && isset($_POST['openid']) && isset($_POST['type']) && isset($_POST['service']) && isset($_POST['total_fee']) && isset($_POST['cash_fee'])) {
-    $user_meta = array('openid' => $_POST['openid'], 'property_ID' => $_POST['property_ID'], 'type' => $_POST['type'], 'state' => '已提交', 'time_up' => time(), 'service' => $_POST['service'], 'time_serv' => $_POST['time_serv'], 'remarks' => $_POST['remarks'], 'total_fee' => $_POST['total_fee'], 'cash_fee' => $_POST['cash_fee'], 'service_progress' => 0);
+    $user_meta = array('openid' => $_POST['openid'], 'property_ID' => $_POST['property_ID'], 'type' => $_POST['type'], 'time_up' => time(), 'service' => $_POST['service'], 'time_serv' => $_POST['time_serv'], 'remarks' => $_POST['remarks'], 'total_fee' => $_POST['total_fee'], 'cash_fee' => $_POST['cash_fee'], 'service_progress' => 0);
     if ($_POST['type'] == "房管家") {
         $period = $_POST['period'];
         $frequency = $_POST['frequency'];
         $user_meta['service_detail'] = $period . ":" . $frequency;
+		$user_meta['state'] = '已提交';
     }
 	//车管家、生活管家不扣款
     if ($_POST['type'] == "车管家" || $_POST['type'] == "生活管家") {
+		$user_meta['state'] = '已预订';
 		$order_id = $db->row_insert('wx_order', $user_meta);
 		if ($order_id > 0) {
             echo 'True:' . $order_id;
